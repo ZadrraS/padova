@@ -58,6 +58,9 @@ class IsochroneSet(BaseReader):
 
         # Load the entire dataset
         colnames = self._parse_colnames(blocks[0]['header_lines'][-1])
+        for i in range(len(colnames)):
+            if i != 0 and colnames[i] == 'Z':
+                colnames[i] = 'Z_mag'
         # skip first column because it's a blank tab
         usecols = [i + 1 for i, c in enumerate(colnames)]
         dt = []
