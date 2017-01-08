@@ -6,7 +6,9 @@ and split them into individual isochrones.
 """
 
 import os
+import sys
 from collections import OrderedDict
+from io import BytesIO
 
 import numpy as np
 from astropy.table import Table, join
@@ -67,7 +69,10 @@ class IsochroneSet(BaseReader):
             else:
                 dt.append((cname, np.float))
         self._f.seek(0)
-        data = np.genfromtxt(self._f,
+        read_buffer = self._f
+        if sys.version_info[0] > 2:
+            read_buffer = BytesIO(self._f.read().encode('utf8'))
+        data = np.genfromtxt(read_buffer,
                              dtype=np.dtype(dt),
                              delimiter='\t',
                              autostrip=True,
