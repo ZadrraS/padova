@@ -22,6 +22,7 @@ class BaseReader(object):
         hdeque = deque()
         self._f.seek(0)
         block = None
+        i = 0
         for i, line in enumerate(self._f):
             if line.startswith('#'):
                 # This is a header line
@@ -35,7 +36,7 @@ class BaseReader(object):
                 # Close the block
                 block['start'] = i
                 block['header_lines'] = [hdeque.pop()
-                                         for j in xrange(n_header_lines)][::-1]
+                                         for j in range(n_header_lines)][::-1]
                 data_blocks.append(block)
 
                 # Treat excess header lines as a global header

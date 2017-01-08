@@ -11,19 +11,20 @@ def compression_type(filename, stream=False):
 
     From ezpadova by Morgan Fousneau
     """
-    magic_dict = {"\x1f\x8b\x08": "gz",
-                  "\x42\x5a\x68": "bz2",
-                  "\x50\x4b\x03\x04": "zip"}
+    magic_dict = {b"\x1f\x8b\x08": "gz",
+                  b"\x42\x5a\x68": "bz2",
+                  b"\x50\x4b\x03\x04": "zip"}
 
     max_len = max(len(x) for x in magic_dict)
     if not stream:
-        with open(filename) as f:
+        with open(filename, 'r') as f:
             file_start = f.read(max_len)
-        for magic, filetype in magic_dict.items():
+            print(file_start)
+        for magic, filetype in list(magic_dict.items()):
             if file_start.startswith(magic):
                 return filetype
     else:
-        for magic, filetype in magic_dict.items():
+        for magic, filetype in list(magic_dict.items()):
             if filename[:len(magic)] == magic:
                 return filetype
 

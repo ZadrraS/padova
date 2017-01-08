@@ -30,7 +30,7 @@ class IsochroneSet(BaseReader):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         try:
             isoc = self._isochrones[self._current]
             self._current += 1
@@ -104,7 +104,7 @@ class IsochroneSet(BaseReader):
         header = header.replace('=', ' ')
         parts = header.split()[1:-1]
         vals = [float(p) for p in parts[1::2]]
-        meta = OrderedDict(zip(parts[::2], vals))
+        meta = OrderedDict(list(zip(parts[::2], vals)))
         return meta
 
 
@@ -271,8 +271,7 @@ def join_isochrones(left_isoc, right_isoc, right_bands=None, left_bands=None):
         left_bands = t_left.filter_names
 
     if left_bands is not None:
-        removed_bands = list(set(t_left.filter_names)
-                             - set(left_bands))
+        removed_bands = list(set(t_left.filter_names) - set(left_bands))
         t_left.remove_columns(removed_bands)
 
     # Also remove bands from left that appear on the right

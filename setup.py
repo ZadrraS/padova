@@ -19,7 +19,7 @@ def read(filename):
     full_filename = os.path.join(
         os.path.abspath(os.path.dirname(__file__)),
         filename)
-    return unicode(codecs.open(full_filename, encoding='utf-8').read())
+    return codecs.open(full_filename, encoding='utf-8').read()
 
 long_description = '\n\n'.join([read('README.rst'),
                                 read('CHANGES.rst')])

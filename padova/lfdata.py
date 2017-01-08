@@ -22,7 +22,7 @@ class LFTable(BaseReader):
         table file.
     lfs : list
         List of :class:`LuminosityFunction` instances in the table.
-    
+
     Parameters
     ----------
 
@@ -35,8 +35,8 @@ class LFTable(BaseReader):
     def _read(self):
         """Read isochrone table and create LuminosityFunction instances."""
         start_indices = self._prescan_table()
-        print "start_indices",
-        print start_indices
+        print("start_indices", end=' ')
+        print(start_indices)
         self._lf_specs = self._read_lf_specs(start_indices)
         self.metadata = self._read_metadata(0, start_indices[0])
         self.lfs = self._read_lfs(start_indices)
@@ -75,7 +75,7 @@ class LFTable(BaseReader):
         # build datatype for structured array
         dt = [(cname, np.float) for cname in header]
         data = np.empty(end_index - start_index - 2, dtype=np.dtype(dt))
-        for j, i in enumerate(xrange(start_index + 2, end_index)):
+        for j, i in enumerate(range(start_index + 2, end_index)):
             parts = linecache.getline(self.fname, i + 1).rstrip('\n').split()
             for val, (cname, typ) in zip(parts, dt):
                 if typ == np.float:
@@ -85,9 +85,9 @@ class LFTable(BaseReader):
                 else:
                     data[cname][j] = val
         tbl = Table(data,
-                meta={"header": self.metadata,
-                      "Z": meta['Z'],
-                      'age': meta['age']})
+                    meta={"header": self.metadata,
+                          "Z": meta['Z'],
+                          'age': meta['age']})
         lf = LuminosityFunction(tbl)
         return lf
 
@@ -95,7 +95,7 @@ class LFTable(BaseReader):
 class LuminosityFunction(object):
     """Holds a single luminosity function (single age, metallicity) for
     several bandpasses.
-    
+
     Parameters
     ----------
 

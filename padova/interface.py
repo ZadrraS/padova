@@ -9,6 +9,12 @@ Code adapted from ezpadova - Morgan Fousneau, MIT License
 from __future__ import print_function, unicode_literals, division
 
 import sys
+import zlib
+import re
+
+from padova.resultcache import PadovaCache
+from padova.utils import compression_type
+from padova.isocdata import IsochroneSet
 
 if sys.version_info[0] > 2:
     py3k = True
@@ -23,13 +29,6 @@ else:
     from urllib2 import urlopen
     from StringIO import StringIO
     import HTMLParser as parser
-
-import zlib
-import re
-
-from padova.resultcache import PadovaCache
-from padova.utils import compression_type
-from padova.isocdata import IsochroneSet
 
 
 class CMDRequest(object):
@@ -79,6 +78,8 @@ class CMDRequest(object):
             typ = compression_type(r, stream=True)
             if typ is not None:
                 r = zlib.decompress(bytes(r), 15 + 32)
+            if py3k:
+                r = r.decode('utf8')
             return r
         else:
             # print(c)
